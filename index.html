@@ -4,114 +4,127 @@
   <title>Technology Trends</title>
 
   <style type="text/css">
-    body{
-  margin:0;
-  padding:0;
-  font-family: 'Tomorrow', sans-serif;
-  height:100vh;
-background-image: linear-gradient(to top, #2e1753, #1f1746, #131537, #0d1028, #050819);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
+body {
+  display: -webkit-flex;
+  color: #6B4ECA; /* purple */
 }
-.text{
-  position:absolute;
-  top:10%;
-  color:#fff;
-  text-align:center;
+#main {
+  font-family: "Avenir Next", Helvetica;
+  border: 2px solid lightgrey;
+  border-radius: 10px;
+  margin: auto;
+  width: 700px;
+  height: 520px;
+  overflow: hidden;
 }
-h1{
-  font-size:50px;
+
+.hello,.world {
+  text-align: center;
+  margin: 10px auto -50px auto;
+  
+  text-transform: uppercase;
+  font-family: "Avenir Next", Helvetica;
+  font-weight: bold;
+  font-size: 6em;
+  letter-spacing: 4;    
 }
-.star{
-  position:absolute;
-  width:2px;
-  height:2px;
-  background:#fff;
-  right:0;
-  animation:starTwinkle 3s infinite linear;
+.hello {
+  margin-top: 90px;
 }
-.astronaut img{
-  width:100px;
-  position:absolute;
-  top:55%;
-  animation:astronautFly 6s infinite linear;
+.world {
+  -webkit-transition-property: -webkit-transform, opacity;
+  -webkit-transition-timing-function: ease-out;
+  -webkit-transition-duration: 1s;
 }
-@keyframes astronautFly{
-  0%{
-    left:-100px;
-  }
-  25%{
-    top:50%;
-    transform:rotate(30deg);
-  }
-  50%{
-    transform:rotate(45deg);
-    top:55%;
-  }
-  75%{
-    top:60%;
-    transform:rotate(30deg);
-  }
-  100%{
-    left:110%;
-    transform:rotate(45deg);
+.world.offscreen {
+  -webkit-transform: translateY(280px) scaleY(2);
+  opacity: 0.5;
+}
+.letter {
+  display: inline-block;
+  -webkit-transition-property: -webkit-transform, opacity;
+  -webkit-transition-timing-function: ease-out;
+  -webkit-transition-duration: 1s;
+}
+.letter.offscreen {    
+  -webkit-transform: translateX(-720px) rotate(-360deg);
+  opacity: 0.5;
+}
+.offscreen {
+  -webkit-transition-property: none;
+}
+.button {
+  background-color: #A4A4A4;
+  color: white;
+  display: inline-block;
+  margin: 10px;
+  padding: 6px 10px 6px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-family: Helvetica Neue;
+  text-shadow: 0px 0px 2px rgba(50,50,50,0.5);
+}
+@media screen and (device-width:768px) {
+  #main {
+    width: 540px;
   }
 }
-@keyframes starTwinkle{
-  0%{
-     background:rgba(255,255,255,0.4);
-  }
-  25%{
-    background:rgba(255,255,255,0.8);
-  }
-  50%{
-   background:rgba(255,255,255,1);
-  }
-  75%{
-    background:rgba(255,255,255,0.8);
-  }
-  100%{
-    background:rgba(255,255,255,0.4);
-  }
+#title {
+  color: grey;
+  margin: 10px 0px 0px 12px;
 }
   </style>
 
   <script type="text/javascript">
-    document.addEventListener("DOMContentLoaded",function(){
-  
- var body=document.body;
-  setInterval(createStar,100);
-  function createStar(){
-    var right=Math.random()*500;
-    var top=Math.random()*screen.height;
-    var star=document.createElement("div");
- star.classList.add("star")
-  body.appendChild(star);
-  setInterval(runStar,10);
-    star.style.top=top+"px";
-  function runStar(){
-    if(right>=screen.width){
-      star.remove();
-    }
-    right+=3;
-    star.style.right=right+"px";
+   function init() {
+  var letters = document.querySelectorAll('.hello>.letter');
+  var delay = 3;
+  var duration = 0.8;
+  for (var i=0; i<letters.length; i++) {
+    letters[i].style.webkitTransitionDelay = delay + "s";
+    letters[i].style.webkitTransitionDuration = duration + "s";
+    
+    delay-=0.5;
+    duration+=0.2;
   }
-  } 
-})
+  startTransitions();
+}
+function startTransitions() {
+  var letters = document.querySelectorAll('.letter');
+  for (var i=0; i<letters.length; i++) {
+    letters[i].classList.remove('offscreen');
+  }
+}
+function resetTransitions() {
+  var letters = document.querySelectorAll('.letter');
+  for (var i=0; i<letters.length; i++) {
+    letters[i].classList.add('offscreen');
+  }
+  document.querySelector('.world').classList.add('offscreen');
+}
+
+function checkLetter() {
+  var letter = event.target;
+  console.log(letter.innerText);
+  if (!letter.classList.contains('first')) return;
+  
+  document.querySelector('.world.offscreen').classList.remove('offscreen');
+}
   </script>
 </head>
 <body>
-<div class="text">
-  <div>ERROR</div>
-  <h1>404</h1>
-  <hr>
-  <div>Page Not Found</div>
-</div>
-
-<div class="astronaut">
-  <img src="https://images.vexels.com/media/users/3/152639/isolated/preview/506b575739e90613428cdb399175e2c8-space-astronaut-cartoon-by-vexels.png" alt="" class="src">
-</div>
+<body onload="init();">
+  <div id="main">
+  <div id="title">H-E-L-L-O WORLD Animation</div>
+  <div class="button" onclick="resetTransitions();">Reset Transitions</div>
+    <div class="button" onclick="startTransitions();">Start Transitions</div>
+      
+    <div class="hello" onwebkittransitionend="checkLetter();">
+      <span class="first letter offscreen">H</span><span class="letter offscreen">E</span><span class="letter offscreen">L</span><span class="letter offscreen">L</span><span class="letter offscreen">O</span>
+    </div>
+    
+    <div class="world offscreen">WORLD</div>
+  </div> <!-- end main -->
+</body>
 </body>
 </html>
